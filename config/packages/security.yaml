@@ -1,0 +1,42 @@
+security:
+  enable_authenticator_manager: true
+  password_hashers:
+    App\Entity\User:
+      algorithm: auto
+
+  providers:
+    app_user_provider:
+      entity:
+        class: App\Entity\User
+        property: email
+
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    refresh:
+      pattern: ^/api/auth/refresh
+      stateless: true
+
+    login:
+      pattern: ^/api/auth/login
+      stateless: true
+      json_login:
+        username_path: email
+        check_path: /api/auth/login
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+    api:
+      pattern: ^/api
+      stateless: true
+      jwt: ~
+      custom_authenticators:
+        - App\Security\Authenticator\SocialAuthenticator
+
+  access_control:
+    - { path: ^/api/auth, roles: PUBLIC_ACCESS }
+    - { path: ^/api/auth/refresh, roles: PUBLIC_ACCESS, methods: [ 'POST' ] }
+    - { path: ^/api/post, roles: PUBLIC_ACCESS, methods: [ 'GET' ] }
+    - { path: ^/api/, roles: ROLE_USER }

@@ -1,0 +1,18 @@
+knpu_oauth2_client:
+  clients:
+    google:
+      type: google
+      client_id: '%env(OAUTH_GOOGLE_CLIENT_ID)%'
+      client_secret: '%env(OAUTH_GOOGLE_CLIENT_SECRET)%'
+      redirect_route: connect_social_check
+      redirect_params: { social: google }
+      use_state: false
+
+    vk:
+      type: generic
+      provider_class: App\Security\Providers\Vk\Vk
+      client_id: '%env(OAUTH_VK_CLIENT_ID)%'
+      client_secret: '%env(OAUTH_VK_CLIENT_SECRET)%'
+      redirect_route: connect_social_check
+      redirect_params: { social: vk }
+      use_state: false
